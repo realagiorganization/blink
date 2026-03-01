@@ -1,14 +1,14 @@
 Prompt ID: prompt_ios_app_blink-p00005-e18952
-Timestamp: 2026-03-01T18:16:33.075942+00:00
+Timestamp: 2026-03-01T19:17:11.649856+00:00
 Source: discord
-Queue: guild-1353735964635435100-run-22549043813::prompt_queue::discord_1353735964635435100_1353735964635435100_1462823597822316675_realagicorp_iosapp_prompt_ios_app_blink_1462823597822316675_json
+Queue: guild-1353735964635435100-run-22550018723::prompt_queue::discord_1353735964635435100_1353735964635435100_1462823597822316675_realagicorp_iosapp_prompt_ios_app_blink_1462823597822316675_json
 Run: 1/1
 Content:
 Discord channel: prompt_ios_app_blink
 Channel ID: 1462823597822316675
 Queue label: prompt_ios_app_blink
 Messages aggregated: 8
-Available repository: realagiorganization/blink -> /tmp/repositories/realagiorganization_blink
+Available repository: realagiorganization/blink -> /tmp/repositories/realagiorganization--blink
 
 Discord channel: prompt_ios_app_blink | ID: 1462823597822316675 | Reaction filter: :white_check_mark:
 
