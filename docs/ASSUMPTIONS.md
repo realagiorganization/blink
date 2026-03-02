@@ -1,5 +1,5 @@
 # Assumptions
 
-- Paywall design reference images were not present in the attached artifacts, so the paywall refresh in `Blink/Subscriptions/Intro.swift` follows Blink's existing dark/teal palette and layout conventions while adding a card-based layout and stronger hierarchy.
-- The requested "opencode" CLI is implemented as `scripts/opencode_cli.py` with an OpenAI-compatible HTTP API; it expects `LLM_API_KEY` and optional `LLM_API_URL`/`LLM_MODEL` secrets in GitHub Actions.
-- The "GitHub Pages website" URL was not specified; no automated screenshot target was configured until a URL is provided.
+- The available reference images in `/out/_media/` are repository UI screenshots rather than paywall mocks, so the paywall in `Blink/Subscriptions/Intro.swift` keeps Blink's existing dark/teal styling while presenting the "TRY IT FREE FOR 14 DAYS" CTA and entitlement highlights.
+- The `scripts/screenshot_pages.js` workflow defaults to `https://realagiorganization.github.io/blink/`; set the `PAGES_URL` secret to point the Pages screenshot action at a different site.
+- The "opencode" CLI lives at `scripts/opencode_cli.py`, uses an OpenAI-compatible HTTP API, and relies on encrypted GitHub Actions secrets (`LLM_API_KEY` with optional `LLM_API_URL`/`LLM_MODEL`), including when invoked inside the tmux/VHS recording for the BDD run.
