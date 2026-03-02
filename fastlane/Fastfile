@@ -1,0 +1,35 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Build and upload a release build to TestFlight"
+  lane :beta do
+    api_key = app_store_connect_api_key(
+      key_id: ENV.fetch("ASC_KEY_ID"),
+      issuer_id: ENV.fetch("ASC_ISSUER_ID"),
+      key_content: ENV.fetch("ASC_KEY_P8"),
+      is_key_content_base64: true,
+      in_house: false
+    )
+
+    if ENV["MATCH_GIT_URL"]
+      match(
+        type: "appstore",
+        git_url: ENV["MATCH_GIT_URL"],
+        readonly: true,
+        app_identifier: ENV.fetch("APP_IDENTIFIER")
+      )
+    end
+
+    build_app(
+      project: "Blink.xcodeproj",
+      scheme: "Blink",
+      clean: true,
+      export_method: "app-store"
+    )
+
+    upload_to_testflight(
+      api_key: api_key,
+      skip_waiting_for_build_processing: true
+    )
+  end
+end

@@ -503,6 +503,85 @@ struct IntroSetupsCarouselView: View {
 
 }
 
+struct PaywallFeatureRow: View {
+  let title: String
+  let detail: String
+
+  var body: some View {
+    HStack(alignment: .top, spacing: 12) {
+      Image(systemName: "checkmark.seal.fill")
+        .foregroundColor(BlinkColors.blink)
+
+      VStack(alignment: .leading, spacing: 4) {
+        Text(title)
+          .font(BlinkFonts.offeringSubheader)
+          .foregroundColor(.white)
+        Text(detail)
+          .font(BlinkFonts.offeringInfo)
+          .foregroundColor(BlinkColors.infoText)
+      }
+
+      Spacer(minLength: 0)
+    }
+    .padding(12)
+    .background(BlinkColors.secondaryBtnBG.opacity(0.7))
+    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+    .overlay(
+      RoundedRectangle(cornerRadius: 12, style: .continuous)
+        .stroke(BlinkColors.secondaryBtnBorder, lineWidth: 1)
+    )
+  }
+}
+
+struct PaywallPlanCard: View {
+  let title: String
+  let subtitle: String
+  let price: String
+  let badge: String?
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 8) {
+      HStack {
+        Text(title)
+          .font(BlinkFonts.offeringSubheader)
+          .foregroundColor(.white)
+        Spacer()
+        if let badge = badge {
+          Text(badge.uppercased())
+            .font(BlinkFonts.offeringCompactSubheader)
+            .foregroundColor(BlinkColors.code)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 4)
+            .background(BlinkColors.codeBG)
+            .clipShape(Capsule())
+        }
+      }
+
+      Text(subtitle)
+        .font(BlinkFonts.offeringInfo)
+        .foregroundColor(BlinkColors.infoText)
+
+      Text(price)
+        .font(BlinkFonts.headerCompact)
+        .foregroundColor(BlinkColors.code)
+    }
+    .padding(16)
+    .frame(maxWidth: .infinity, alignment: .leading)
+    .background(
+      LinearGradient(
+        gradient: Gradient(colors: [BlinkColors.blinkBG, BlinkColors.bg]),
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+      )
+    )
+    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+    .overlay(
+      RoundedRectangle(cornerRadius: 16, style: .continuous)
+        .stroke(BlinkColors.blink, lineWidth: 1.5)
+    )
+  }
+}
+
 struct NewOfferingsView: View {
   let classicOffering: Bool
   let ctx: PageCtx
@@ -515,6 +594,11 @@ struct NewOfferingsView: View {
   var osName: String {
     UIDevice.current.userInterfaceIdiom == .pad ? "iPadOS" : "iOS"
   }
+  private let paywallFeatures: [(String, String)] = [
+    ("Always-on sessions", "Mosh keeps connections alive across networks."),
+    ("SmartKeys power-ups", "Custom modifiers and shortcuts for speed."),
+    ("Multi-host flow", "Tabs, split view, and quick host switching.")
+  ]
 
   private var headerText: some View {
     TypingText(fullText: "THE PRO TERMINAL FOR \(osName)", cursor: "█", style:  {
@@ -527,28 +611,45 @@ struct NewOfferingsView: View {
   
   var body: some View {
     VStack {
-      VStack() {
-        VStack(alignment: .center) {
+      VStack(spacing: ctx.outterPadding()) {
+        VStack(alignment: .center, spacing: ctx.outterPadding()) {
           IntroSetupsCarouselView()
 
-          if classicOffering {
-            VStack {
-              headerText
-              BlinkClassicBulletPoints()
-            }
-            //.padding([.top, .bottom], 30)
-            .frame(maxWidth: .infinity)
-          } else {
-            VStack {
-              headerText
-              Text("Fully customizable, always-on, and ready for anything. Your entire terminal workflow, now fits in your pocket.")
-                .font(ctx.offeringSubheaderFont())
-                .fixedSize(horizontal: false, vertical: true)
-                .foregroundColor(BlinkColors.blinkText) // 3
-                .multilineTextAlignment(.center)
-            }
-            .padding([.top, .bottom], ctx.outterPadding())
+          VStack(spacing: 12) {
+            Text("BLINK+ MEMBERSHIP")
+              .font(BlinkFonts.offeringCompactSubheader)
+              .foregroundColor(BlinkColors.blinkText)
+              .padding(.horizontal, 12)
+              .padding(.vertical, 6)
+              .background(BlinkColors.blinkBG)
+              .clipShape(Capsule())
+
+            headerText
+
+            Text("Fully customizable, always-on, and ready for anything. Your entire terminal workflow now fits in your pocket.")
+              .font(ctx.offeringSubheaderFont())
+              .fixedSize(horizontal: false, vertical: true)
+              .foregroundColor(BlinkColors.blinkText)
+              .multilineTextAlignment(.center)
           }
+
+          if classicOffering {
+            BlinkClassicBulletPoints()
+              .frame(maxWidth: .infinity)
+          } else {
+            VStack(spacing: 12) {
+              ForEach(paywallFeatures, id: \.0) { feature in
+                PaywallFeatureRow(title: feature.0, detail: feature.1)
+              }
+            }
+          }
+
+          PaywallPlanCard(
+            title: "Blink+ Pro",
+            subtitle: "Unlimited screen time and premium features",
+            price: _purchases.formattedPlusPriceWithPeriod()?.uppercased() ?? "LOADING...",
+            badge: _purchases.blinkPlusIntroOfferAvailable() ? "14-Day Free Trial" : nil
+          )
         }
         .padding(ctx.pagePadding())
         .background(.black)
@@ -558,7 +659,7 @@ struct NewOfferingsView: View {
           .frame(height: 2)
           .padding(0)
 
-        VStack {
+        VStack(spacing: 12) {
           Button(blinkPlusSubscribeButtonText()) {
             Task {
               await self.purchaseBlinkPlus()
@@ -570,6 +671,10 @@ struct NewOfferingsView: View {
             TrialSwitch(doTrialNotification: $doTrialNotification)
               .disabled(_purchases.restoreInProgress || _purchases.purchaseInProgress)
           }
+
+          Text("Cancel anytime. Restore purchases anytime.")
+            .font(BlinkFonts.btnSub)
+            .foregroundColor(BlinkColors.termsText)
 
           NewOfferingTermsButtons(ctx: ctx, purchaseCompletedHandler: purchaseCompletedHandler, urlHandler: urlHandler)
         }

@@ -1,4 +1,8 @@
 # Blink Shell for iOS
+![CI](https://github.com/realagiorganization/blink/actions/workflows/build.yml/badge.svg)
+![BDD](https://github.com/realagiorganization/blink/actions/workflows/bdd.yml/badge.svg)
+![TestFlight](https://github.com/realagiorganization/blink/actions/workflows/testflight.yml/badge.svg)
+![Pages Screenshot](https://github.com/realagiorganization/blink/actions/workflows/pages-screenshot.yml/badge.svg)
 Do Blink! [Blink](https://blink.sh) is the first professional, desktop-grade terminal for iOS that leverages the support of Mosh and SSH. Thus, we can unequivocally guarantee stable connections, lightning-fast speeds, and full configurations. It can and should be your all-day-long tool.
 
 We did not create another terminal to fix your website on the go. Blink was built as a professional grade product from the onset. We started by analyzing what the must-haves were and we ended up grounding Blink on these three concepts:
@@ -72,7 +76,6 @@ Bugs should be reported here on GitHub. If you have any questions or want to mak
 We can't wait to receive your valuable feedback. Enjoy!
 
 ## Build
-![CI](https://github.com/blinksh/blink/workflows/CI/badge.svg)
 
 We made a ton easier to build and install Blink yourself on your iOS devices through XCode. We provide a precompiled package with all the libraries for the master branch. Here are the steps:
 
@@ -103,6 +106,9 @@ edit developer_setup.xcconfig (change apple developer id etc).
 This will download Blink and the associated frameworks: `libssh2`, `OpenSSL`, `libmoshios`, `protobuf` and `ios_system`. 
 
 Although this is the quickest method to get you up and running, if you would like to compile all libraries and resources yourself, refer to the [BUILD.md](BUILD.md) file. Please let us know if you find any issues. Blink is a complex project with multiple low level dependencies and we are still looking for ways to simplify and automate the full compilation process.
+
+# BDD Recording
+![BDD VHS recording](docs/assets/llm-bdd.gif)
 
 # Using Blink
 Our UI is very straightforward and optimizes the experience on touch devices for the really important part, the terminal. You will jump right into a very simple shell, so you will know what to do. Here are a few more tricks:

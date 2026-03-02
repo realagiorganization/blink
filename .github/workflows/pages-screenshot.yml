@@ -1,0 +1,37 @@
+name: Pages Screenshot
+
+on:
+  workflow_dispatch:
+
+jobs:
+  screenshot:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Playwright
+        run: |
+          npm init -y
+          npm install playwright@1.41.2
+          npx playwright install --with-deps chromium
+
+      - name: Capture Pages screenshot
+        env:
+          PAGES_URL: ${{ secrets.PAGES_URL }}
+          SCREENSHOT_PATH: artifacts/pages-home.png
+        run: node scripts/screenshot_pages.js
+
+      - name: Upload screenshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: github-pages-screenshot
+          path: artifacts/pages-home.png
